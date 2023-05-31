@@ -5,19 +5,21 @@ clear all;
 % parameters for rrt
 dist_threshold = 0.8;
 
+% create map space
 x_max = 12; 
 y_max = 12; 
 
-
+% define starting position
 start = [5; 5]
 
 % generate simple map
-
+% if you have the navigation toolbox installed, you can try this experiment
+% with a previous defined map -- uncomment the following line
 % map = load_map_from_image('simple_office_map.png');
 map = zeros(1200,1200);
 
 figure(1); 
-% show(map)
+% show(map)     % uncomment if you use the navigation package
 hold on; 
 plot(start(1), start(2), 'ro')
 grid on; 
@@ -25,111 +27,66 @@ xlim([0 x_max]);
 ylim([0 y_max]);
 
 
+
+% add the starting node to the tree
 tree = [start]; 
 
+% number of iterations
 n = 1000; 
-f = cell(n,1) ; 
 for i=1:n
 
-    
+    % get a random point int the area
     rnd_point = get_random_coord(x_max, y_max); 
 
-    % [best_point, shortest_dist] = find_nearest_tree_point(rnd_point, tree, start)
 
     shortest_dist       = 10000; 
     nearest_neighbor    = start; 
     nr_of_tree_elements = length(tree(1,:));
 
+
+    % find the closest point in the tree
     for j=1:nr_of_tree_elements
-        p = tree(:,j);
-        dist = norm(p - rnd_point);
-        if (dist < shortest_dist)
-            shortest_dist = dist; 
-            best_point    = p; 
-        end; 
-    end;
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %        ADD YOUR CODE HERE          %
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-    % if the distance exceeds the distance threshold
-    if (shortest_dist > dist_threshold)
-        diff = rnd_point - best_point;
-        l    = norm(diff);
-        rnd_point = dist_threshold*(diff / l) + best_point;
     end
 
 
+    % if the distance exceeds the distance threshold
+    % move the point in the direction of the closest point. 
+    % the point should be then have the same distance to the closest
+    % point, as the distance threshold
+    if (shortest_dist > dist_threshold)
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %        ADD YOUR CODE HERE          %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    % check if the line intersects with an obstacle
-    diff      = rnd_point - best_point; 
-    angle     = atan2(diff(2), diff(1));
-    pose      = [best_point(1), best_point(2), angle]; 
-    % intersect = rayIntersection(map, pose, angle, 3);
-    % 
-    % 
-    % intersect_obstacle = sum(isnan(intersect));
-    % 
-    % 
-    %     % check if this point is in obstacle
-    % obstacle = checkOccupancy(map, rnd_point', "local");
-    % if obstacle == 1
-    %     plot(rnd_point(1), rnd_point(2), 'rx');
-    %     % display(rnd_point);
-    %     continue;
-    % end
+        
+    end
 
 
-    % if (intersect_obstacle == 0)
-    %     plot(intersect(1), intersect(2), 'bx'); 
-    %     continue;
-    % end
+    
+    % check if the added point is within an obstacle and draw a line
+    % between the random point and the closest point
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %        ADD YOUR CODE HERE          %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    % if((obstacle == 0) && (intersect_obstacle == 2))
-        tree = [tree, rnd_point];
-        % plot(rnd_point(1), rnd_point(2), 'g+');
-        hold on; 
-        plot([best_point(1) rnd_point(1)], [best_point(2) rnd_point(2)], 'r-');
-    % end
+ 
+
+
+    plot(rnd_point(1), rnd_point(2), 'g+');
+    % hold on; 
+    % plot([best_point(1) rnd_point(1)], [best_point(2) rnd_point(2)], 'r-');
+
     drawnow; 
-    %pause(0.001);
-
-   % f{i} = getframe(gcf) ;
 end
 
 
 
-% obj = VideoWriter('rrt.mpeg', 'MPEG-4');
-% obj.Quality = 50;
-% obj.FrameRate = 60;
-% open(obj);
-% for i = 1:n
-%     writeVideo(obj, f{i}) ;
-% end
-% obj.close();
 
-
-
-function [nearest_neighbor, shortest_dist] = find_nearest_tree_point(point, start, tree)
-
-    shortest_dist       = 10000; 
-    nearest_neighbor    = start; 
-    nr_of_tree_elements = length(tree(1,:));
-    
-    for j=1:nr_of_tree_elements
-        p = tree(:,j);
-        point;
-        dist = norm(p - point);
-        if (dist < shortest_dist)
-            shortest_dist = dist; 
-            nearest_neighbor = p; 
-        end; 
-
-        nearest_neighbor;
-
-    end;
-
-    
-
-end
 
 function map = load_map_from_image(image_path)
     image     = imread('simple_office_map.png');
