@@ -1,4 +1,4 @@
-# Tutorial on Random exploring Random Trees
+# Tutorial on Rapidly exploring Random Trees (RRT)
 
 
 ![ezgif-3-e571579d4f](https://github.com/christianpfitzner/rrt_tutorial/assets/20952014/014b1dd1-351f-4502-9095-47e2459b590e)
